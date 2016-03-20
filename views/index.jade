@@ -1,5 +1,54 @@
 extends layout
 
+
 block content
-  h1= title
-  p Welcome to #{title}
+  #header
+    h2(id="logo") MyWay
+    img(id="user" src="images/icons/profile.png")
+    form(id="search_bar" name="search_bar", method="post")
+      input(type="text" name="location" required placeholder="Enter a location")
+      input(type="image" name="submit" src="images/icons/search.png" alt="Search")
+
+
+  #search_filter
+    form(name="search_filter", method="post")
+      label(class="filterBy") CATEGORIES
+      fieldset
+        legend Travel
+        input(type="checkbox" name="travel" value="hotel" id="hotel")
+        label(for="hotel") Hotel
+      fieldset
+        legend Activity
+        input(type="checkbox" name="activity" value="eat" id="eat")
+        label(for="eat") Eat
+        br
+        input(type="checkbox" name="activity" value="concert" id="concert")
+        label(for="concert") Concert
+        br
+        input(type="checkbox" name="activity" value="shopping" id="shopping")
+        label(for="shopping") Shopping
+      label(class="filterBy") PRICE RANGE
+        br
+        input(type="checkbox" name="price" value="20less" id="20less")
+        label(for="20less") $0 - $20
+        br
+        input(type="checkbox" name="price" value="40less" id="40less")
+        label(for="40less") $20 - $40
+        br
+        input(type="checkbox" name="price" value="70less" id="70less")
+        label(for="70less") $40 - $70
+        br
+        input(type="checkbox" name="price" value="120less" id="120less")
+        label(for="120less") $70 - $120
+        br
+        input(type="checkbox" name="price" value="120more" id="120more")
+        label(for="120more") $120+
+        br
+      label(class="filterBy") DATE
+        br
+        input(type="date" name="date")
+        br
+      input(type="submit" name="submit" value="Submit" id="submit_button")
+
+  #search_results
+    h1 Search Results
