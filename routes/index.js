@@ -1,5 +1,3 @@
-import json
-
 var express = require('express');
 var router = express.Router();
 
@@ -15,13 +13,17 @@ function searchQuery(theUrl, callback)
     xmlHttp.send(null);
 }
 
-function searchResults(price) {
-	
+function searchResults(results) {
+	results= JSON.parse(results)
+	// results_area= document.getElementById("search_results")
+	console.log("searchResults")
 }
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  console.log("home")
+  res.render('index', { title: 'MyWay2' });
+  searchQuery("https://partner-api.groupon.com/deals.json?tsToken=US_AFF_0_201236_212556_0&limit=50", searchResults())
 });
 
 module.exports = router;

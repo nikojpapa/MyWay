@@ -5,13 +5,13 @@ block content
   #header
     h2(id="logo") MyWay
     img(id="user" src="images/icons/profile.png")
-    form(id="search_bar" name="search_bar", method="post")
+    form(id="search_bar" name="search_bar", method="post", action="/")
       input(type="text" name="location" required placeholder="Enter a location")
       input(type="image" name="submit" src="images/icons/search.png" alt="Search")
 
 
   #search_filter
-    form(name="search_filter", method="post")
+    form(id="search_filter", name="search_filter", method="post", action="/")
       label(class="filterBy") CATEGORIES
       fieldset
         legend Travel
