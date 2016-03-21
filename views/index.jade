@@ -55,15 +55,14 @@ block content
       input(type="submit" name="submit" value="Submit" id="submit_button")
 
     #search_results
-      h1 Search Results
       if resultJSON
+        h1 Search Results
         - each deal in resultJSON.deals
           figure
             a(href= deal.dealUrl): img(src= deal.grid4ImageUrl)
             a(href= deal.dealUrl): figcaption= deal.title
             p(class="figure_info") Deal starts: #{deal.startAt}
             p(class="figure_info") Deal ends: #{deal.endAt}
-            p(class="figure_info") Tags:
-            - each tag in deal.tags
-               //p= tag
+      if message
+        h1= message
 
