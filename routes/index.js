@@ -1,29 +1,46 @@
 var express = require('express');
 var router = express.Router();
+var request = require('request');
 
 /* Functions */
-function searchQuery(theUrl, callback)
+/*
+function searchQuery(queryUrl)
 {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(xmlHttp.responseText);
-    }
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            return JSON.parse(xmlhttp.responseText);
+        }
+        else {
+            return null;
+        }
+    };
+
+    xmlHttp.open("GET", queryUrl, false); // true for asynchronous
     xmlHttp.send(null);
 }
-
-function searchResults(results) {
-	results= JSON.parse(results)
-	// results_area= document.getElementById("search_results")
-	console.log("searchResults")
-}
+*/
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log("home")
-  res.render('index', { title: 'MyWay2' });
-  searchQuery("https://partner-api.groupon.com/deals.json?tsToken=US_AFF_0_201236_212556_0&limit=50", searchResults())
+    var location_field = req.param('location');
+    if (location_field)
+    {
+        // if the location field has been filled
+        // Do a search based on the location
+        var query = "https://partner-api.groupon.com/deals.json?tsToken=US_AFF_0_201236_212556_0&limit=10&division_name=" + location_field;
+        // Using request module to pass results
+        request(query, function(err, resp, body) {
+            var results = JSON.parse(body);
+            console.log(results);
+            res.render('index', { title: 'MyWay', location: location_field, resultJSON: results});
+        });
+    }
+    else
+    {
+        // else the location field has not been filled
+        res.render('index', { title: 'MyWay'});
+    }
 });
 
 module.exports = router;
