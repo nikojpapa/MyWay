@@ -14,19 +14,19 @@ a {
 
 #header {
   display: block;
-  height: 80px;
+  height: 85px;
   border-bottom: solid silver 2px;
 }
 
 #logo {
   font-size: 200%;
-  padding: 2% 2%;
+  padding: 2% 2% 0 2%;
   float: left;
 }
 
 #search_bar {
   margin: 0 auto;
-  padding: 2% 2%;
+  padding: 2% 2% 0 2%;
 }
 
 #search_bar input{
@@ -38,13 +38,14 @@ a {
 }
 
 #user {
-  padding: 2% 3%;
+  padding: 2% 3% 0 3%;
   float: right;
 }
 
 #search_filter{
   float: left;
-  padding: 10px 10px;
+  width: 150px;
+  padding: 2% 2%;
 }
 
 #search_filter label.filterBy {
@@ -66,7 +67,15 @@ a {
 
 #search_results{
   display: block;
-  float: left;
-  padding: 20px 40px;
+  padding: 3% 2%;
 }
 
+#search_results figure{
+  display: block;
+  width: 300px;
+  height: 300px;
+  float: left;
+  background-color: whitesmoke;
+  border: 5px solid whitesmoke;
+  margin: 5px;
+}
