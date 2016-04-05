@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 
-
 var MongoClient = require('mongodb').MongoClient,
     test = require('assert');
 // Connection url
@@ -33,25 +32,35 @@ router.get('/', function(req, res, next) {
                     var doc1 = {'hello':'doc1'};
                     var doc2 = {'hello':'doc2'};
                     var searchTerm= location_field.toString();
-                    
-                    var cachedResults = {searchTerm: results};
+                    console.log('SEARCH TERM: ' + searchTerm);
+                    var cachedResults = {'searchTerm': searchTerm, 'cachedResults': results};
+                    // cachedResults[s]= results;
                     var lotsOfDocs = [{'hello':'doc3'}, {'hello':'doc4'}];
 
-                    collection.insert(cachedResults);
+                    // collection.insert(cachedResults);
+                    collection.update({'searchTerm':searchTerm}, {$set:{'cachedResults':results}}, {w:1}, function(err, result) {
+                        console.log('ERROR: '+err);
+                        collection.insert(cachedResults, {w:1}, function(err, result) {});
+                    });
 
-                    // collection.insert(doc2, {w:1}, function(err, result) {});
+                    // collection.insert(cachedResults, {w:1}, function(err, result) {
+                    //     console.log('Update');
+                    //     console.log('SEARCH TERM: ' + searchTerm);
+                    //     collection.update({'searchTerm':searchTerm}, {$set:{'cachedResults':results}}, {w:1}, function(err, result) {});
+                    // });
+
+                     // collection.insert(doc2, {w:1}, function(err, result) {});
                     //
                     // collection.insert(lotsOfDocs, {w:1}, function(err, result) {});
 
                     // Get an additional db
                     // db.createCollection('test', {strict:true}, function(err, collection) {});
-                    // console.log('connected');
-                    db.close();
+            // /*        // console.log('connected');*/
+                    console.log('connected');
+                    // db.close();
                 });
 
                 res.render('index', { title: 'MyWay', location: location_field, resultJSON: results});
-
-
             }
 
         });

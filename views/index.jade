@@ -4,13 +4,12 @@ block content
   #header
     h2(id="logo") MyWay
     img(id="user" src="images/icons/profile.png")
-    form(id="search_bar" name="search_bar", method="post", action="/")
-      input(type="text" name="location" required placeholder="Enter a location")
+    form(id="search_bar" name="search_bar", method="get", action="/")
+      input(type="text" name="location" required if location value=location else placeholder='Enter a location')
       input(type="image" name="submit" src="images/icons/search.png" alt="Search")
 
-
-  #search_filter
-    form(id="search_filter", name="search_filter", method="post", action="/")
+  if location
+    form(id="search_filter", name="search_filter", method="get", action="/")
       label(class="filterBy") CATEGORIES
       fieldset
         legend Travel
@@ -45,32 +44,24 @@ block content
         br
       label(class="filterBy") DATE
         br
-        input(type="date" name="date")
+        label Start date
+        input(type="date" name="startdate")
         br
+        label End date
+        input(type="date" name="enddate")
+        br
+      input(type="hidden" name="location" value=location)
       input(type="submit" name="submit" value="Submit" id="submit_button")
 
-  #search_results
-    h1 Search Results
-
-
-- console.log("home")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    #search_results
+      if resultJSON
+        h1 Search Results
+        - each deal in resultJSON.deals
+          figure
+            a(href= deal.dealUrl): img(src= deal.grid4ImageUrl)
+            a(href= deal.dealUrl): figcaption= deal.title
+            p(class="figure_info") Deal starts: #{deal.startAt}
+            p(class="figure_info") Deal ends: #{deal.endAt}
+      if message
+        h1= message
 
