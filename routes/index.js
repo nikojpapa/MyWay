@@ -22,19 +22,53 @@ router.get('/', function(req, res, next) {
             }
 
             var collection = db.collection('new');
-            var searchTermTest = location_field.toString();
+            var searchTerm = location_field.toString();
 
 
-            collection.findOne({'searchTerm': searchTermTest}, function (err, doc) {
-                console.log(doc);
+            collection.findOne({'searchTerm': searchTerm}, function (err, doc) {
+                // console.log(doc); //prints json object for test purposes
                 var testResult = doc;
                 if (testResult == null) {
                     console.log("Entry not found in database, performing API call...");
+                    // if the location field has been filled
+                    // Do a search based on the location
+                    var query = "https://partner-api.groupon.com/deals.json?tsToken=US_AFF_0_201236_212556_0&limit=10&division_id=" + location_field;
+                    // Using request module to pass results
+                    request(query, function (err, resp, body) {
+                        var results = JSON.parse(body);
+                        var finalResults = results;
+                        if (results.error) {
+                            res.render('index', {title: 'MyWay', location: location_field, message: results.error.message});
+                        }
+                        else {
+                                console.log('SEARCH TERM: ' + searchTerm);
+                                var cachedResults = {'searchTerm': searchTerm, 'cachedResults': results};
+                                collection.insert(cachedResults);
+                                console.log('connected, new document inserted');
+                            }
+
+                            res.render('index', {title: 'MyWay', location: location_field, resultJSON: finalResults});
+                        });
+
+
                 }
 
                 if (testResult != null) {
                     console.log("Entry already found in database");
-                    // res.render('index', {title: 'MyWay', location: location_field, resultJSON: testResult});
+                    //begin messing around
+                    // var query = "https://partner-api.groupon.com/deals.json?tsToken=US_AFF_0_201236_212556_0&limit=10&division_id=" + location_field;
+                    // request(query, function (err, resp, body) {
+                    //     var results = JSON.parse(body);
+                    //     var finalResults = results;
+                    //
+                    //
+                    //
+                    //     res.render('index', {title: 'MyWay', location: location_field, resultJSON: finalResults});
+                    // });
+                    //end
+                    // var results = JSON.parse();
+                    var finalResults = testResult.cachedResults;
+                    res.render('index', {title: 'MyWay', location: location_field, resultJSON: finalResults});
 
                 }
 
@@ -42,39 +76,6 @@ router.get('/', function(req, res, next) {
 
         });
 
-        // if the location field has been filled
-        // Do a search based on the location
-        var query = "https://partner-api.groupon.com/deals.json?tsToken=US_AFF_0_201236_212556_0&limit=10&division_id=" + location_field;
-        // Using request module to pass results
-        request(query, function (err, resp, body) {
-            var results = JSON.parse(body);
-            var finalResults = results;
-            if (results.error) {
-                res.render('index', {title: 'MyWay', location: location_field, message: results.error.message});
-            }
-            else {
-                MongoClient.connect(url, function (err, db) {
-
-                    if (err) {
-                        return console.dir(err);
-                    }
-
-                    var collection = db.collection('new');
-
-                    var searchTerm = location_field.toString();
-                    console.log('SEARCH TERM: ' + searchTerm);
-                    var cachedResults = {'searchTerm': searchTerm, 'cachedResults': results};
-
-
-                    collection.insert(cachedResults);
-
-                    console.log('connected');
-                });
-
-                res.render('index', {title: 'MyWay', location: location_field, resultJSON: finalResults});
-            }
-
-            });
         }
 
     else
