@@ -9,8 +9,8 @@ var url = 'mongodb://localhost:27017/TestLocalHost';
 
 /* Functions */
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
+/* api routing */
+router.get('/api', function(req, res, next) {
     var location_field = req.param('location');
     if (location_field) {
 
@@ -22,8 +22,8 @@ router.get('/', function(req, res, next) {
             }
 
             var collection = db.collection('new');
-            var searchTerm = location_field.toString();
-
+            var searchTerm = location_field.toString().replace(/\s+/g, '-').toLowerCase();
+            console.log(searchTerm);
 
             collection.findOne({'searchTerm': searchTerm}, function (err, doc) {
                 // console.log(doc); //prints json object for test purposes
@@ -32,13 +32,13 @@ router.get('/', function(req, res, next) {
                     console.log("Entry not found in database, performing API call...");
                     // if the location field has been filled
                     // Do a search based on the location
-                    var query = "https://partner-api.groupon.com/deals.json?tsToken=US_AFF_0_201236_212556_0&limit=10&division_id=" + location_field;
+                    var query = "https://partner-api.groupon.com/deals.json?tsToken=US_AFF_0_201236_212556_0&limit=12&division_id=" + searchTerm;
                     // Using request module to pass results
                     request(query, function (err, resp, body) {
                         var results = JSON.parse(body);
                         var finalResults = results;
                         if (results.error) {
-                            res.render('index', {title: 'MyWay', location: location_field, message: results.error.message});
+                            return res.json({message: results.error.message});
                         }
                         else {
                                 console.log('SEARCH TERM: ' + searchTerm);
@@ -47,7 +47,7 @@ router.get('/', function(req, res, next) {
                                 console.log('connected, new document inserted');
                             }
 
-                            res.render('index', {title: 'MyWay', location: location_field, resultJSON: finalResults});
+                            return res.json({resultJSON: finalResults});
                         });
 
 
@@ -68,7 +68,7 @@ router.get('/', function(req, res, next) {
                     //end
                     // var results = JSON.parse();
                     var finalResults = testResult.cachedResults;
-                    res.render('index', {title: 'MyWay', location: location_field, resultJSON: finalResults});
+                    return res.json({resultJSON: finalResults});
 
                 }
 
@@ -76,12 +76,6 @@ router.get('/', function(req, res, next) {
 
         });
 
-        }
-
-    else
-    {
-        // else the location field has not been filled
-        res.render('index', { title: 'MyWay'});
     }
 });
 

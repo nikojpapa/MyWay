@@ -1,0 +1,26 @@
+<!-- The navigation bar -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" id="logo" ng-click="toHomepage()">MyWay</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <form class = "navbar-form navbar-left" role = "form" ng-submit="toSearch()">
+                    <div class = "form-group right-inner-addon">
+                        <a class="clear" ng-click="formFields.location = ''"><span class="glyphicon glyphicon-remove"></span></a>
+                        <input type = "text" ng-model="formFields.location" class = "form-control" placeholder = "Enter a location" value = {{formFields.location}} required>
+                    </div>
+                    <button type = "submit" class = "btn btn-default"><span class="glyphicon glyphicon-search"></span> Search</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/" ng-click="toSignUp()"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li><a href="/" ng-click="toLogIn()"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>

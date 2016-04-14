@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MyWay</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Load Bootstrap -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <!-- Load Angular -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js"></script>
+    <!-- Load our own scripts and css -->
+    <script src="./angular_scripts.js"></script>
+    <link rel="stylesheet" href="./stylesheets/style.css">
+</head>
+
+<body>
+    <div class="page-wrapper" ng-app="myWay" ng-controller="myWayCtrl">
+        <!-- The navigation bar -->
+        <div ng-include=templates.nav></div>
+
+        <!-- The main content -->
+        <div class="container-fluid" id="main-content">
+            <div ng-include=templates.main></div>
+        </div>
+
+        <!-- The footer -->
+        <div class="container-fluid footer">
+            <p>&copy; 2016 MyWay Development Team</p>
+        </div>
+    </div>
+
+</body>
+</html>
