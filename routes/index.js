@@ -61,7 +61,7 @@ router.get('/api', function(req, res, next) {
             if (err) {
                 return console.dir(err);
             }
-            var collection = db.collection('new');
+            var collection = db.collection('deals_db');
             var searchTerm = location_field.toString().replace(/\s+/g, '-').toLowerCase();
 
             collection.findOne({'searchTerm': searchTerm}, function (err, doc) {

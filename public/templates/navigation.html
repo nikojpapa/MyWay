@@ -18,6 +18,10 @@
                     <button type = "submit" class = "btn btn-default"><span class="glyphicon glyphicon-search"></span> Search</button>
                 </form>
                 <ul class="nav navbar-nav navbar-right">
+                    <form id = "profile-button" action="profile.html" method="get" target="_blank">
+                        <input type="hidden" name='user' value={{user.userid}}>
+                        <input type='submit' value='Edit Profile'>
+                    </form>
                     <script>
                         // This is called with the results from from FB.getLoginStatus().
                         function statusChangeCallback(response) {
@@ -34,10 +38,13 @@
                                 // The person is not logged into Facebook, so we're not sure if
                                 // they are logged into this app or not.
                                 document.getElementById('username').innerHTML= '';
+                                document.getElementById('profile-button').style.display = "none";
                                 var appElement = document.querySelector('[ng-app=myWay]');
                                 var $scope = angular.element(appElement).scope();
                                 $scope.$apply(function() {
                                     $scope.user.username = undefined;
+                                    $scope.user.userid = undefined;
+                                    $scope.user.email = undefined;
                                 });
                             }
                         }
@@ -94,11 +101,14 @@
                         function loggedIn() {
                             FB.api('/me', function(response) {
                                 document.getElementById('username').innerHTML= response.name;
+                                document.getElementById('profile-button').style.display = "block";
                                 console.log("fb id: "+response.id);
                                 var appElement = document.querySelector('[ng-app=myWay]');
                                 var $scope = angular.element(appElement).scope();
                                 $scope.$apply(function() {
                                     $scope.user.username = response.name;
+                                    $scope.user.userid = response.id;
+                                    $scope.user.email = response.email;
                                 });
                             });
                         }

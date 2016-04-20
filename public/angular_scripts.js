@@ -64,7 +64,7 @@ app.controller('myWayCtrl', function($scope, $http, $sce) {
                             $scope.display.searchResults += "<button class='btn btn-info center-block disabled' data-toggle='tooltip' data-placement='right' title='Please login first'><span class='glyphicon glyphicon-plus'></span> Join Group</button></div></div>";
                         }
                         else{
-                            $scope.display.searchResults += "<button class='btn btn-info center-block' ng-click=\"toJoin(\'"+ deal.uuid.toString() +"\')\"><span class='glyphicon glyphicon-plus'></span> Join Group</button></div></div>";
+                            $scope.display.searchResults += "<button class='btn btn-info center-block' ng-click=\"toJoin(\'"+ deal.uuid.toString() +"\')\"><span class='glyphicon glyphicon-plus'></span> Join Group</button><form action='group.html' method='get' target='_blank'><input type=\"hidden\" name='deal' value='"+ deal.uuid.toString() +"'><input class = 'view-button' type='submit' value='View'></form></div></div>";
                         }
                     }
                 }
@@ -107,6 +107,7 @@ app.controller('myWayCtrl', function($scope, $http, $sce) {
     };
 
     $scope.toJoin = function(dealuid) {
+        // Variables related to user: $scope.user.username, $scope.user.userid, $scope.user.email
 
     };
     
