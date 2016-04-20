@@ -108,7 +108,7 @@ app.controller('myWayCtrl', function($scope, $http, $sce) {
 
     $scope.toJoin = function(dealuid) {
         // Variables related to user: $scope.user.username, $scope.user.userid, $scope.user.email
-
+        $http.get('http://localhost:3000/addToGroup', {params: {dealuid: dealuid, userid: $scope.user.userid}});
     };
     
 });

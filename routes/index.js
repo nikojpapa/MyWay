@@ -118,4 +118,69 @@ router.get('/api', function(req, res, next) {
     }
 });
 
+/* add to group */
+router.get('/addToGroup', function(req, res, next) {
+    var userid = req.param('userid');
+    var dealid= req.param('dealid');
+
+    MongoClient.connect(url, function (err, db) {
+            if (err) {
+                return console.dir(err);
+            }
+            console.log("addToGroup");
+            var collection = db.collection('groups_db');
+            // var searchTerm = location_field.toString().replace(/\s+/g, '-').toLowerCase();
+
+            collection.findOne({'userid': userid}, function (err, doc) {
+                // console.log(doc); //prints json object for test purposes
+                var testResult = doc;
+                if (testResult == null) {
+                    console.log("Adding user " + userid + " to group " + dealid);
+                    
+                    var newUser = {'dealid': dealid, 'userid': userid};
+                    collection.insert(newUser);
+                    return "added user";
+                }
+
+                if (testResult != null) {
+                    console.log(userid + " already in group");
+                    return "user already added";
+                }
+            });
+        });
+});
+
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
