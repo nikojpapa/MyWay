@@ -94,6 +94,7 @@
                         function loggedIn() {
                             FB.api('/me', function(response) {
                                 document.getElementById('username').innerHTML= response.name;
+                                console.log("fb id: "+response.id);
                                 var appElement = document.querySelector('[ng-app=myWay]');
                                 var $scope = angular.element(appElement).scope();
                                 $scope.$apply(function() {

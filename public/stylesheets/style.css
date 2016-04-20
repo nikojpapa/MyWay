@@ -71,6 +71,16 @@ body, html{
 
 }
 
+.price {
+    font-family: 'Julius Sans One', "Trebuchet MS", sans-serif;
+    font-weight: bold;
+    color: var(--myway-dark);
+    position:absolute;
+    left: 30px;
+    bottom: 20px;
+    z-index: 5;
+}
+
 .formError{
     font-size: 90%;
     color: var(--myway-dark);
