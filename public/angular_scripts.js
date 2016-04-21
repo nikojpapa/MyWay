@@ -110,15 +110,36 @@ app.controller('myWayCtrl', function($scope, $http, $sce) {
         // Variables related to user: $scope.user.username, $scope.user.userid, $scope.user.email
         $http.get('http://localhost:3000/addToGroup', {params: {dealid: dealid, userid: $scope.user.userid}});
     };
-
-    $scope.displayGroup = function(dealid) {
-        $http.get('http://localhost:3000/get_members', {params: {dealid: dealid}})
-                .then(function(response) {
-                    $scope.display.group_members = "<h3>"+response.data.message.toString()+"</h3>";
-                });
-    }
     
 });
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+};
+
+app.controller('myWayGroupCtrl', function($scope, $http, $sce) {
+    /*
+     Initialize scope variables
+     - $scope.display contains all other html for displaying the page:
+        - group_members
+     */
+    $scope.display = {};
+    var dealid = getParameterByName('deal', document.URL);
+    if (dealid){
+        $http.get('http://localhost:3000/get_members', {params: {dealid: dealid}})
+            .then(function(response) {
+                console.log("Response received from get_members");
+                $scope.display.group_members = "<h3>"+response.data.message.toString()+"</h3>";
+            });
+    }
+});
+
 
 $(document).ready(function() {
     $("body").tooltip({ selector: '[data-toggle=tooltip]' });
