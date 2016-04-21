@@ -135,7 +135,7 @@ app.controller('myWayGroupCtrl', function($scope, $http, $sce) {
         $http.get('http://localhost:3000/get_members', {params: {dealid: dealid}})
             .then(function(response) {
                 console.log("Response received from get_members");
-                $scope.display.group_members = "<h3>"+response.data.message.toString()+"</h3>";
+                $scope.display.group_members = "<h3>"+response.toString()+"</h3>";
             });
     }
 });

@@ -62,7 +62,7 @@ router.get('/api', function(req, res, next) {
         //need to check to see if our search term is already in the database. If so, don't make api call.
         MongoClient.connect(url, function (err, db) {
             if (err) {
-                db.close();
+                // db.close();
                 return console.dir(err);
             }
             var collection = db.collection('deals_db');
@@ -132,7 +132,7 @@ router.get('/addToGroup', function(req, res, next) {
 
     MongoClient.connect(url, function (err, db) {
             if (err) {
-                db.close();
+                // db.close();
                 return console.dir(err);
             }
             console.log("addToGroup");
@@ -145,16 +145,25 @@ router.get('/addToGroup', function(req, res, next) {
                 if (testResult == null) {
                     console.log("Adding user " + userid + " to group " + dealid);
                     
-                    var newUser = {'dealid': dealid, 'userids': doc['userids'].push(userid)};
-                    collection.update(newUser);
+                    var newUser= {'dealid': dealid, 'userids': [userid]};
+                    collection.insert(newUser);
                     db.close();
                     return "added user";
                 }
 
                 if (testResult != null) {
-                    console.log(userid + " already in group");
-                    db.close();
-                    return "user already added";
+                    var oldUsers= doc['userids']
+
+                    if (oldUsers.indexOf(userid) > -1) {
+                        console.log(userid + " already in group " + dealid);
+                        db.close();
+                        return "user already added";
+                    } else {
+                        var newUser= {'dealid': dealid, 'userids': oldUsers.push(userid)};
+                        collection.insert(newUser);
+                        db.close();
+                        return "added user";
+                    }
                 }
             });
         });
@@ -166,7 +175,7 @@ router.get('/get_members', function(req, res, next) {
 
     MongoClient.connect(url, function (err, db) {
             if (err) {
-                db.close();
+                // db.close();
                 return console.dir(err);
             }
             console.log("get_members");
@@ -176,14 +185,12 @@ router.get('/get_members', function(req, res, next) {
             collection.findOne({'dealid': dealid}, function (err, doc) {
                 // console.log(doc); //prints json object for test purposes
                 var testResult = doc;
-                if (testResult == null) {
-                    console.log("Returning " + doc['userids'].length + " members from group " + groupid);
+                if (testResult != null) {
+                    console.log("Returning " + doc['userids'].length + " members from group " + dealid);
                     
                     db.close();
                     return doc['userids'];
-                }
-
-                if (testResult != null) {
+                } else if (testResult == null) {
                     console.log(dealid + " not found");
                     db.close();
                     return "deal not found";
