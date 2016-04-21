@@ -139,14 +139,14 @@ router.get('/addToGroup', function(req, res, next) {
             var collection = db.collection('groups_db');
             // var searchTerm = location_field.toString().replace(/\s+/g, '-').toLowerCase();
 
-            collection.findOne({'userid': userid}, function (err, doc) {
+            collection.findOne({'dealid': dealid}, function (err, doc) {
                 // console.log(doc); //prints json object for test purposes
                 var testResult = doc;
                 if (testResult == null) {
                     console.log("Adding user " + userid + " to group " + dealid);
                     
-                    var newUser = {'dealid': dealid, 'userid': userid};
-                    collection.insert(newUser);
+                    var newUser = {'dealid': dealid, 'userids': doc['userids'].push(userid)};
+                    collection.update(newUser);
                     db.close();
                     return "added user";
                 }
@@ -155,6 +155,38 @@ router.get('/addToGroup', function(req, res, next) {
                     console.log(userid + " already in group");
                     db.close();
                     return "user already added";
+                }
+            });
+        });
+});
+
+/* display group members */
+router.get('/get_members', function(req, res, next) {
+    var dealid= req.param('dealid');
+
+    MongoClient.connect(url, function (err, db) {
+            if (err) {
+                db.close();
+                return console.dir(err);
+            }
+            console.log("get_members");
+            var collection = db.collection('groups_db');
+            // var searchTerm = location_field.toString().replace(/\s+/g, '-').toLowerCase();
+
+            collection.findOne({'dealid': dealid}, function (err, doc) {
+                // console.log(doc); //prints json object for test purposes
+                var testResult = doc;
+                if (testResult == null) {
+                    console.log("Returning " + doc['userids'].length + " members from group " + groupid);
+                    
+                    db.close();
+                    return doc['userids'];
+                }
+
+                if (testResult != null) {
+                    console.log(dealid + " not found");
+                    db.close();
+                    return "deal not found";
                 }
             });
         });

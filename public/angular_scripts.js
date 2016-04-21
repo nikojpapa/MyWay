@@ -106,10 +106,17 @@ app.controller('myWayCtrl', function($scope, $http, $sce) {
         }
     };
 
-    $scope.toJoin = function(dealuid) {
+    $scope.toJoin = function(dealid) {
         // Variables related to user: $scope.user.username, $scope.user.userid, $scope.user.email
-        $http.get('http://localhost:3000/addToGroup', {params: {dealuid: dealuid, userid: $scope.user.userid}});
+        $http.get('http://localhost:3000/addToGroup', {params: {dealid: dealid, userid: $scope.user.userid}});
     };
+
+    $scope.displayGroup = function(dealid) {
+        $http.get('http://localhost:3000/get_members', {params: {dealid: dealid}})
+                .then(function(response) {
+                    $scope.display.group_members = "<h3>"+response.data.message.toString()+"</h3>";
+                });
+    }
     
 });
 
