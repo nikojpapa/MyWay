@@ -26,6 +26,7 @@ router.get('/api', function(req, res, next) {
         request(query, function (err, resp, body) {
             var results = JSON.parse(body);
             if (results.error) {
+                db.close();
                 return res.json({message: results.error.message});
             }
             else {
@@ -46,9 +47,11 @@ router.get('/api', function(req, res, next) {
                 }
                 // console.log(finalResults);
                 if (finalResults.deals.length == 0){
+                    db.close();
                     return res.json({message: "Deal Not found"});
                 }
                 else {
+                    db.close();
                     return res.json({resultJSON: finalResults});
                 }
             }
@@ -59,6 +62,7 @@ router.get('/api', function(req, res, next) {
         //need to check to see if our search term is already in the database. If so, don't make api call.
         MongoClient.connect(url, function (err, db) {
             if (err) {
+                db.close();
                 return console.dir(err);
             }
             var collection = db.collection('deals_db');
@@ -75,6 +79,7 @@ router.get('/api', function(req, res, next) {
                     request(query, function (err, resp, body) {
                         var results = JSON.parse(body);
                         if (results.error) {
+                            db.close();
                             return res.json({message: results.error.message});
                         }
                         else {
@@ -95,13 +100,14 @@ router.get('/api', function(req, res, next) {
                             }
                             // console.log(finalResults);
                             if (finalResults.deals.length == 0){
+                                db.close();
                                 return res.json({message: "Deal Not found"});
                             }
                             else {
                                 var cachedResults = {'searchTerm': searchTerm, 'cachedResults': finalResults};
                                 collection.insert(cachedResults);
                                 console.log('connected, new document inserted');
-                                return res.json({resultJSON: finalResults});
+                                db.close();
                                 return res.json({resultJSON: finalResults});
                             }
                         }
@@ -111,6 +117,7 @@ router.get('/api', function(req, res, next) {
                 if (testResult != null) {
                     console.log("Entry already found in database");
                     var finalResults = testResult.cachedResults;
+                    db.close();
                     return res.json({resultJSON: finalResults});
                 }
             });
@@ -125,6 +132,7 @@ router.get('/addToGroup', function(req, res, next) {
 
     MongoClient.connect(url, function (err, db) {
             if (err) {
+                db.close();
                 return console.dir(err);
             }
             console.log("addToGroup");
@@ -139,11 +147,13 @@ router.get('/addToGroup', function(req, res, next) {
                     
                     var newUser = {'dealid': dealid, 'userid': userid};
                     collection.insert(newUser);
+                    db.close();
                     return "added user";
                 }
 
                 if (testResult != null) {
                     console.log(userid + " already in group");
+                    db.close();
                     return "user already added";
                 }
             });
