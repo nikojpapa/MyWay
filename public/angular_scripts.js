@@ -173,7 +173,7 @@ app.controller('myWayGroupCtrl', function($scope, $http, $sce) {
                 if (response.data.message){
                     $scope.display.group_members = "<div class='container'><div class='page-header'><h2>"+response.data.message.toString()+"</h2></div></div>";
                 }
-                else if (response.data.userids) {
+                else if (response.data.members) {
                     var total = response.data.members.length;
                     $scope.display.group_members = "<div class='container'><div class='page-header'><h2>Group Members</h2></div>";
                     for(var i=0;i<total;i++) {
