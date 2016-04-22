@@ -12,11 +12,16 @@ body, html{
     height: 100%;
     font-family: 'Libre Baskerville', "Trebuchet MS", sans-serif;
     background: #ffffff  url("./../images/pattern-07.jpg") repeat;
+    color: #f8f8ff;
 }
 
 .page-wrapper{
     min-height:95%;
     position:relative;
+}
+
+#myNavbar{
+    color: var(--myway-dark);
 }
 
 #logo{
@@ -104,6 +109,7 @@ body, html{
     top: 50px;
     z-index: 5;
     background-color: rgba(250,229,150,0.8);
+    color: var(--myway-dark);
 }
 
 #join-existed-message{
@@ -114,6 +120,7 @@ body, html{
     top: 50px;
     z-index: 5;
     background-color: rgba(250,229,150,0.8);
+    color: var(--myway-dark);
 }
 
 #join-error-message{
@@ -124,6 +131,11 @@ body, html{
     top: 50px;
     z-index: 5;
     background-color: rgba(250,229,150,0.8);
+    color: var(--myway-dark);
+}
+
+#profile-info li {
+    color: var(--myway-dark);
 }
 
 .footer {
