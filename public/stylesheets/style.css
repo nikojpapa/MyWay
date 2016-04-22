@@ -1,11 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Julius+Sans+One|Libre+Baskerville:400,400italic);
 
-:root {
-  --myway-yellow: rgb(250,229,150);
-  --myway-teal: rgb(63,176,172);
-  --myway-dark: rgb(23,62,67);
-}
-
 body, html{
     margin: 0;
     padding: 0;
@@ -21,14 +15,14 @@ body, html{
 }
 
 #myNavbar{
-    color: var(--myway-dark);
+    color: rgb(23,62,67);
 }
 
 #logo{
     font-size: 150%;
     font-weight: bold;
     font-family: 'Julius Sans One', "Trebuchet MS", sans-serif;
-    color: var(--myway-teal);
+    color: rgb(63,176,172);
 }
 
 .right-inner-addon{
@@ -47,7 +41,7 @@ body, html{
 
 #profile-button {
     position: absolute;
-    right: 150px;
+    right: 200px;
     top: 15px;
 }
 
@@ -61,7 +55,7 @@ body, html{
     text-align: center;
     vertical-align: center;
     padding: 4% 4%;
-    background-color: rgba(63,176,172,0.4);
+    background-color: rgba(250,229,150,0.4);
 }
 
 #main-content{
@@ -69,7 +63,8 @@ body, html{
 }
 
 .well {
-    background-color: rgba(63,176,172,0.3);
+    background-color: rgba(250,229,150,0.4);
+    border: solid rgba(250,229,150,0.4) 2px;
 }
 
 .thumbnail{
@@ -84,7 +79,7 @@ body, html{
 .price {
     font-family: 'Julius Sans One', "Trebuchet MS", sans-serif;
     font-weight: bold;
-    color: var(--myway-dark);
+    color: rgb(23,62,67);
     position:absolute;
     left: 30px;
     bottom: 20px;
@@ -94,7 +89,7 @@ body, html{
 .view-button{
     font-family: 'Julius Sans One', "Trebuchet MS", sans-serif;
     font-weight: bold;
-    color: var(--myway-dark);
+    color: rgb(23,62,67);
     position:absolute;
     right: 20px;
     bottom: 30px;
@@ -109,7 +104,7 @@ body, html{
     top: 50px;
     z-index: 5;
     background-color: rgba(250,229,150,0.8);
-    color: var(--myway-dark);
+    color: rgb(23,62,67);
 }
 
 #join-existed-message{
@@ -120,7 +115,7 @@ body, html{
     top: 50px;
     z-index: 5;
     background-color: rgba(250,229,150,0.8);
-    color: var(--myway-dark);
+    color: rgb(23,62,67);
 }
 
 #join-error-message{
@@ -131,11 +126,11 @@ body, html{
     top: 50px;
     z-index: 5;
     background-color: rgba(250,229,150,0.8);
-    color: var(--myway-dark);
+    color: rgb(23,62,67);
 }
 
-#profile-info li {
-    color: var(--myway-dark);
+#profile-info ul li {
+    color: rgb(23,62,67);
 }
 
 .footer {
@@ -148,17 +143,17 @@ body, html{
     text-align: center;
 }
 
-@media (max-width: 750px) {
-    #profile-button {
-        position: static;
-    }
-}
-
 @media (max-width: 992px) {
     #homepage-carousel{
         margin: 5% 8% 5% 8%;
     }
     #homepage-box{
         margin: 0% auto;
+    }
+}
+
+@media (max-width: 767px) {
+    #profile-button {
+        position: static;
     }
 }

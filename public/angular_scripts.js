@@ -163,7 +163,7 @@ app.controller('myWayGroupCtrl', function($scope, $http, $sce) {
         - userid
     */
     $scope.templates = {};
-    $scope.templates.nav = "./templates/navigation.html";
+    $scope.templates.nav = "./templates/navigation-clean.html";
     $scope.display = {};
     $scope.user = {};
     var dealid = getParameterByName('deal', document.URL);
@@ -196,7 +196,7 @@ app.controller('myWayProfileCtrl', function($scope, $http, $sce) {
         - userid
      */
     $scope.templates = {};
-    $scope.templates.nav = "./templates/navigation.html";
+    $scope.templates.nav = "./templates/navigation-clean.html";
     $scope.profile = {};
     $scope.user = {};
     var user_id = getParameterByName('user', document.URL);
