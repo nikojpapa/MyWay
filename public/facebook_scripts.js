@@ -91,6 +91,7 @@ function loggedIn() {
         var $scope = angular.element(appElement).scope();
         $scope.$apply(function() {
             $scope.user.userid = uid;
+            $scope.user.name = name;
         });
 
         createDefaultProfile('http://localhost:3000/create_default_profile?uid='+uid+'&name='+name);

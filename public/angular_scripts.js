@@ -112,7 +112,7 @@ app.controller('myWayCtrl', function($scope, $http, $sce) {
 
     $scope.toJoin = function(dealid) {
         // Variables related to user: $scope.user.userid
-        $http.get('http://localhost:3000/addToGroup', {params: {dealid: dealid, userid: "5634568959531", name: $scope.user.userid}})
+        $http.get('http://localhost:3000/addToGroup', {params: {dealid: dealid, userid: $scope.user.userid, name: $scope.user.name}})
             .then(function(response) {
                 if (response.data.result.toString() == "success"){
                     $("#join-success-message").show();
@@ -168,11 +168,11 @@ app.controller('myWayGroupCtrl', function($scope, $http, $sce) {
                     $scope.display.group_members = "<div class='container'><div class='page-header'><h2>"+response.data.message.toString()+"</h2></div></div>";
                 }
                 else if (response.data.userids) {
-                    var total = response.data.userids.length;
+                    var total = response.data.members.length;
                     $scope.display.group_members = "<div class='container'><div class='page-header'><h2>Group Members</h2></div>";
                     for(var i=0;i<total;i++) {
                         var member = response.data.members[i];
-                        $scope.display.group_members += "<a href=\"profile.html?user=" + member.name + "\" target='_blank' role = 'button' class='btn btn-primary btn-lg'><span class='glyphicon glyphicon-user'>"+member.uid+"</span></a>&nbsp;&nbsp;";
+                        $scope.display.group_members += "<a href=\"profile.html?user=" + member.uid + "\" target='_blank' role = 'button' class='btn btn-primary btn-lg'><span class='glyphicon glyphicon-user'>"+member.name+"</span></a>&nbsp;&nbsp;";
                     }
                     $scope.display.group_members += "</div>";
                 }
