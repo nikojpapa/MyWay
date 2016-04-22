@@ -191,6 +191,39 @@ router.get('/get_members', function(req, res, next) {
     });
 });
 
+/* create default profile */
+router.get('/create_default_profile', function(req, res, next) {
+    var uid= req.param('uid');
+    var name= req.param('name');
+
+    MongoClient.connect(url, function (err, db) {
+        if (err) {
+            // db.close();
+            return res.json({message: "Unable to connect to database"});
+        }
+        console.log("users_db");
+        var collection = db.collection('users_db');
+        collection.findOne({'uid': uid}, function (err, doc) {
+            // console.log(doc); //prints json object for test purposes
+            var testResult = doc;
+            if (testResult == null) {
+                console.log("Creating profile for " + uid);
+
+                var newUser= {'uid': uid, 'name': name};
+                collection.insert(newUser);
+
+                db.close();
+                return res.json({messege: "Creating profile for " + uid});
+
+            } else if (testResult != null) {
+                console.log('Profile already created for ' + uid);
+                db.close();
+                return res.json({message: 'Profile already created for ' + uid});
+            }
+        });
+    });
+});
+
 module.exports = router;
 
 

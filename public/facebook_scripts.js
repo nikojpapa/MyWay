@@ -65,16 +65,61 @@ window.fbAsyncInit = function() {
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
 
+
+function createDefaultProfile(theUrl) {
+    console.log('createDefaultProfile called');
+    var xmlHttp = new XMLHttpRequest();
+    // xmlHttp.onreadystatechange = function() { 
+    //     if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+    //         callback(xmlHttp.responseText);
+    // }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.send(null);
+};
+
 // Here we run a very simple test of the Graph API after login is
 // successful.  See statusChangeCallback() for when this call is made.
 function loggedIn() {
+
     FB.api('/me', function(response) {
-        document.getElementById('username').innerHTML= response.name;
+        var uid= response.id;
+        var name= response.name;
+
+        document.getElementById('username').innerHTML= name;
         document.getElementById('profile-button').style.display = "block";
         var appElement = document.querySelector('[ng-app=myWay]');
         var $scope = angular.element(appElement).scope();
         $scope.$apply(function() {
-            $scope.user.userid = response.id;
+            $scope.user.userid = uid;
         });
+
+        createDefaultProfile('http://localhost:3000/create_default_profile?uid='+uid+'&name='+name);
     });
-}
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

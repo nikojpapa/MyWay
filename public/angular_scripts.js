@@ -172,7 +172,7 @@ app.controller('myWayGroupCtrl', function($scope, $http, $sce) {
                     $scope.display.group_members = "<div class='container'><div class='page-header'><h2>Group Members</h2></div>";
                     for(var i=0;i<total;i++) {
                         var uid = response.data.userids[i];
-                        $scope.display.group_members += "<a href=\"profile.html?user=" + uid + "\" target='_blank' role = 'button' class='btn btn-primary btn-lg'><span class='glyphicon glyphicon-user'></span></a>&nbsp;&nbsp;";
+                        $scope.display.group_members += "<a href=\"profile.html?user=" + uid + "\" target='_blank' role = 'button' class='btn btn-primary btn-lg'><span class='glyphicon glyphicon-user'>"+uid+"</span></a>&nbsp;&nbsp;";
                     }
                     $scope.display.group_members += "</div>";
                 }
