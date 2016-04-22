@@ -156,10 +156,16 @@ function getParameterByName(name, url) {
 app.controller('myWayGroupCtrl', function($scope, $http, $sce) {
     /*
      Initialize scope variables
+     - $scope.templates contains: nav (for displaying the navigation bar)
      - $scope.display contains all other html for displaying the page:
         - group_members
+     - $scope.user contains user information:
+        - userid
     */
+    $scope.templates = {};
+    $scope.templates.nav = "./templates/navigation.html";
     $scope.display = {};
+    $scope.user = {};
     var dealid = getParameterByName('deal', document.URL);
     if (dealid){
         $http.get('http://localhost:3000/get_members', {params: {dealid: dealid}})
@@ -183,10 +189,16 @@ app.controller('myWayGroupCtrl', function($scope, $http, $sce) {
 app.controller('myWayProfileCtrl', function($scope, $http, $sce) {
     /*
      Initialize scope variables
+     - $scope.templates contains: nav (for displaying the navigation bar)
      - $scope.profile contains profile information
         - profile_info
+     - $scope.user contains user information:
+        - userid
      */
+    $scope.templates = {};
+    $scope.templates.nav = "./templates/navigation.html";
     $scope.profile = {};
+    $scope.user = {};
     var user_id = getParameterByName('user', document.URL);
     if (user_id){
         $scope.profile.name = "John Smith";

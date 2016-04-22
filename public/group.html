@@ -18,6 +18,9 @@
 
 <body>
     <div class="page-wrapper" ng-app="myWay" ng-controller="myWayGroupCtrl">
+        <!-- The navigation bar -->
+        <div ng-include=templates.nav></div>
+
         <!-- The group members info -->
         <display content="display.group_members"></display>
 
