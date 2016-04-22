@@ -12,12 +12,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js"></script>
     <!-- Load our own scripts and css -->
     <script src="./angular_scripts.js"></script>
+    <script src="./facebook_scripts.js"></script>
     <link rel="stylesheet" href="./stylesheets/style.css">
 </head>
 
 <body>
-    <div class="page-wrapper" ng-app="myWay" ng-controller="myWayCtrl">
-
+    <div class="page-wrapper" ng-app="myWay" ng-controller="myWayProfileCtrl">
+        <!-- The profile -->
+        <div id='profile-info' class='container'>
+            <div class='page-header'><h2>Profile</h2></div>
+                <ul class="list-group">
+                    <li class="list-group-item">Name: {{profile.name}}</li>
+                    <li class="list-group-item">Email: {{profile.email}}</li>
+                    <li class="list-group-item">Age: {{profile.age}}</li>
+                    <li class="list-group-item">Gender: {{profile.gender}}</li>
+                    <li class="list-group-item">Interests: {{profile.interests}}</li>
+                </ul>
+        </div>
         <!-- The footer -->
         <div class="container-fluid footer">
             <p>&copy; 2016 MyWay Development Team</p>

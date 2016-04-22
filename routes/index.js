@@ -26,7 +26,6 @@ router.get('/api', function(req, res, next) {
         request(query, function (err, resp, body) {
             var results = JSON.parse(body);
             if (results.error) {
-                db.close();
                 return res.json({message: results.error.message});
             }
             else {
@@ -47,11 +46,9 @@ router.get('/api', function(req, res, next) {
                 }
                 // console.log(finalResults);
                 if (finalResults.deals.length == 0){
-                    db.close();
                     return res.json({message: "Deal Not found"});
                 }
                 else {
-                    db.close();
                     return res.json({resultJSON: finalResults});
                 }
             }
@@ -63,7 +60,7 @@ router.get('/api', function(req, res, next) {
         MongoClient.connect(url, function (err, db) {
             if (err) {
                 // db.close();
-                return console.dir(err);
+                return res.json({message: "Unable to connect to database"});
             }
             var collection = db.collection('deals_db');
             var searchTerm = location_field.toString().replace(/\s+/g, '-').toLowerCase();
@@ -128,45 +125,43 @@ router.get('/api', function(req, res, next) {
 /* add to group */
 router.get('/addToGroup', function(req, res, next) {
     var userid = req.param('userid');
-    var dealid= req.param('dealid');
+    var dealid = req.param('dealid');
 
     MongoClient.connect(url, function (err, db) {
-            if (err) {
-                // db.close();
-                return console.dir(err);
+        if (err) {
+            // db.close();
+            return res.json({result: "error"});
+        }
+        console.log("addToGroup");
+        var collection = db.collection('groups_db');
+        collection.findOne({'dealid': dealid}, function (err, doc) {
+            // console.log(doc); //prints json object for test purposes
+            var testResult = doc;
+            if (testResult == null) {
+                console.log("Adding user " + userid + " to group " + dealid);
+                var newUser= {'dealid': dealid, 'userids': [userid]};
+                collection.insert(newUser);
+                db.close();
+                return res.json({result: "success"});
             }
-            console.log("addToGroup");
-            var collection = db.collection('groups_db');
-            // var searchTerm = location_field.toString().replace(/\s+/g, '-').toLowerCase();
 
-            collection.findOne({'dealid': dealid}, function (err, doc) {
-                // console.log(doc); //prints json object for test purposes
-                var testResult = doc;
-                if (testResult == null) {
-                    console.log("Adding user " + userid + " to group " + dealid);
-                    
-                    var newUser= {'dealid': dealid, 'userids': [userid]};
-                    collection.insert(newUser);
+            if (testResult != null) {
+                var oldUsers= doc['userids'];
+                if (oldUsers.indexOf(userid) > -1) {
+                    console.log(userid + " already in group " + dealid);
                     db.close();
-                    return "added user";
+                    return res.json({result: "existed"});
+                } else {
+                    console.log("Adding user " + userid + " to existing group " + dealid);
+                    var newUsers = oldUsers;
+                    newUsers[newUsers.length] = userid;
+                    collection.update({'dealid': dealid}, {$set: {'userids': newUsers}});
+                    db.close();
+                    return res.json({result: "success"});
                 }
-
-                if (testResult != null) {
-                    var oldUsers= doc['userids']
-
-                    if (oldUsers.indexOf(userid) > -1) {
-                        console.log(userid + " already in group " + dealid);
-                        db.close();
-                        return "user already added";
-                    } else {
-                        var newUser= {'dealid': dealid, 'userids': oldUsers.push(userid)};
-                        collection.insert(newUser);
-                        db.close();
-                        return "added user";
-                    }
-                }
-            });
+            }
         });
+    });
 });
 
 /* display group members */
@@ -174,29 +169,26 @@ router.get('/get_members', function(req, res, next) {
     var dealid= req.param('dealid');
 
     MongoClient.connect(url, function (err, db) {
-            if (err) {
-                // db.close();
-                return console.dir(err);
+        if (err) {
+            // db.close();
+            return res.json({message: "Unable to connect to database"});
+        }
+        console.log("get_members");
+        var collection = db.collection('groups_db');
+        collection.findOne({'dealid': dealid}, function (err, doc) {
+            // console.log(doc); //prints json object for test purposes
+            var testResult = doc;
+            if (testResult != null) {
+                console.log("Returning " + doc['userids'].length + " members from group " + dealid);
+                db.close();
+                return res.json({userids: doc['userids']});
+            } else if (testResult == null) {
+                console.log(dealid + " not found");
+                db.close();
+                return res.json({message: "No one has joined this group"});
             }
-            console.log("get_members");
-            var collection = db.collection('groups_db');
-            // var searchTerm = location_field.toString().replace(/\s+/g, '-').toLowerCase();
-
-            collection.findOne({'dealid': dealid}, function (err, doc) {
-                // console.log(doc); //prints json object for test purposes
-                var testResult = doc;
-                if (testResult != null) {
-                    console.log("Returning " + doc['userids'].length + " members from group " + dealid);
-                    
-                    db.close();
-                    return doc['userids'];
-                } else if (testResult == null) {
-                    console.log(dealid + " not found");
-                    db.close();
-                    return "deal not found";
-                }
-            });
         });
+    });
 });
 
 module.exports = router;
