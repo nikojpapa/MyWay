@@ -126,6 +126,7 @@ router.get('/api', function(req, res, next) {
 router.get('/addToGroup', function(req, res, next) {
     var userid = req.param('userid');
     var dealid = req.param('dealid');
+    var name = req.param('name')
 
     MongoClient.connect(url, function (err, db) {
         if (err) {
@@ -139,23 +140,29 @@ router.get('/addToGroup', function(req, res, next) {
             var testResult = doc;
             if (testResult == null) {
                 console.log("Adding user " + userid + " to group " + dealid);
-                var newUser= {'dealid': dealid, 'userids': [userid]};
+                var newUser= {'dealid': dealid, 'members': [{'uid': userid, 'name': name}]};
                 collection.insert(newUser);
                 db.close();
                 return res.json({result: "success"});
-            }
+            } else  {
+                var oldUsers= doc['members'];
 
-            if (testResult != null) {
-                var oldUsers= doc['userids'];
-                if (oldUsers.indexOf(userid) > -1) {
+                var current_member= false;
+                for (user in oldUsers) {
+                    if (user.uid==userid) {
+                        current_member = true;
+                    }
+                }
+
+                if (!current_member) {
                     console.log(userid + " already in group " + dealid);
                     db.close();
                     return res.json({result: "existed"});
                 } else {
                     console.log("Adding user " + userid + " to existing group " + dealid);
                     var newUsers = oldUsers;
-                    newUsers[newUsers.length] = userid;
-                    collection.update({'dealid': dealid}, {$set: {'userids': newUsers}});
+                    newUsers[newUsers.length] = {'uid': userid, 'name': name};
+                    collection.update({'dealid': dealid}, {$set: {'members': newUsers}});
                     db.close();
                     return res.json({result: "success"});
                 }
@@ -176,12 +183,12 @@ router.get('/get_members', function(req, res, next) {
         console.log("get_members");
         var collection = db.collection('groups_db');
         collection.findOne({'dealid': dealid}, function (err, doc) {
-            // console.log(doc); //prints json object for test purposes
+            console.log(doc); //prints json object for test purposes
             var testResult = doc;
             if (testResult != null) {
-                console.log("Returning " + doc['userids'].length + " members from group " + dealid);
+                console.log("Returning " + doc.members.length + " members from group " + dealid);
                 db.close();
-                return res.json({userids: doc['userids']});
+                return res.json({members: doc.members});
             } else if (testResult == null) {
                 console.log(dealid + " not found");
                 db.close();
