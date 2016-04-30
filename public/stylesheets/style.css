@@ -40,6 +40,7 @@ body, html{
 }
 
 #profile-button {
+    display: none;
     position: absolute;
     right: 200px;
     top: 15px;
